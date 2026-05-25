@@ -19,87 +19,87 @@ let userHasPicked = false;
 startBtn.disabled = true;
 
 flatpickr(dateInput, {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onChange() {
-        userHasPicked = true;
-    },
-    onClose(selectedDates) {
-        if (!userHasPicked) return;
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onChange() {
+    userHasPicked = true;
+  },
+  onClose(selectedDates) {
+    if (!userHasPicked) return;
 
-        const picked = selectedDates[0];
-        if (!picked) {
-            userSelectedDate = null;
-            startBtn.disabled = true;
-            return;
-        }
+    const picked = selectedDates[0];
+    if (!picked) {
+      userSelectedDate = null;
+      startBtn.disabled = true;
+      return;
+    }
 
-        if (picked.getTime() > Date.now()) {
-            userSelectedDate = picked;
-            startBtn.disabled = false;
-        } else {
-            userSelectedDate = null;
-            startBtn.disabled = true;
-            iziToast.show({
-                message: 'Please choose a date in the future',
-                messageColor: '#fff',
-                messageSize: '18',
-                backgroundColor: '#ef4040',
-                iconUrl: errorIcon,
-                position: 'topRight',
-                close: false,
-                timeout: 3000,
-            });
-        }
-    },
+    if (picked.getTime() > Date.now()) {
+      userSelectedDate = picked;
+      startBtn.disabled = false;
+    } else {
+      userSelectedDate = null;
+      startBtn.disabled = true;
+      iziToast.show({
+        message: 'Please choose a date in the future',
+        messageColor: '#fff',
+        messageSize: '18',
+        backgroundColor: '#ef4040',
+        iconUrl: errorIcon,
+        position: 'topRight',
+        close: false,
+        timeout: 3000,
+      });
+    }
+  },
 });
 
 startBtn.addEventListener('click', () => {
-    if (!userSelectedDate) return;
+  if (!userSelectedDate) return;
 
-    startBtn.disabled = true;
-    dateInput.disabled = true;
+  startBtn.disabled = true;
+  dateInput.disabled = true;
 
-    updateTimer(userSelectedDate.getTime() - Date.now());
+  updateTimer(userSelectedDate.getTime() - Date.now());
 
-    const timerId = setInterval(() => {
-        const delta = userSelectedDate.getTime() - Date.now();
+  const timerId = setInterval(() => {
+    const delta = userSelectedDate.getTime() - Date.now();
 
-        if (delta <= 0) {
-            clearInterval(timerId);
-            updateTimer(0);
-            dateInput.disabled = false;
-            return;
-        }
+    if (delta <= 0) {
+      clearInterval(timerId);
+      updateTimer(0);
+      dateInput.disabled = false;
+      return;
+    }
 
-        updateTimer(delta);
-    }, 1000);
+    updateTimer(delta);
+  }, 1000);
 });
 
 function addLeadingZero(value) {
-    return String(value).padStart(2, '0');
+  return String(value).padStart(2, '0');
 }
 
 function convertMiliseconds(ms) {
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-    const days = Math.floor(ms / day);
-    const hours = Math.floor((ms % day) / hour);
-    const minutes = Math.floor(((ms % day) % hour) / minute);
-    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-    return { days, hours, minutes, seconds };
+  return { days, hours, minutes, seconds };
 }
 
 function updateTimer(ms) {
-    const { days, hours, minutes, seconds } = convertMiliseconds(ms);
-    daysEl.textContent = addLeadingZero(days);
-    hoursEl.textContent = addLeadingZero(hours);
-    minutesEl.textContent = addLeadingZero(minutes);
-    secondsEl.textContent = addLeadingZero(seconds);
+  const { days, hours, minutes, seconds } = convertMiliseconds(ms);
+  daysEl.textContent = addLeadingZero(days);
+  hoursEl.textContent = addLeadingZero(hours);
+  minutesEl.textContent = addLeadingZero(minutes);
+  secondsEl.textContent = addLeadingZero(seconds);
 }
