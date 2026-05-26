@@ -1,13 +1,12 @@
 import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
-
 import iziToast from 'izitoast';
+import 'flatpickr/dist/flatpickr.min.css';
 import 'izitoast/dist/css/iziToast.min.css';
 
 import errorIcon from '../img/error.svg';
 
-const dateInput = document.querySelector('input#datetime-picker');
 const startBtn = document.querySelector('button[data-start]');
+const dateInput = document.querySelector('input#datetime-picker');
 const daysEl = document.querySelector('span[data-days]');
 const hoursEl = document.querySelector('span[data-hours]');
 const minutesEl = document.querySelector('span[data-minutes]');
@@ -65,20 +64,20 @@ startBtn.addEventListener('click', () => {
   updateTimer(userSelectedDate.getTime() - Date.now());
 
   const timerId = setInterval(() => {
-    const delta = userSelectedDate.getTime() - Date.now();
+    const difference = userSelectedDate.getTime() - Date.now();
 
-    if (delta <= 0) {
+    if (difference <= 0) {
       clearInterval(timerId);
       updateTimer(0);
       dateInput.disabled = false;
       return;
     }
 
-    updateTimer(delta);
+    updateTimer(difference);
   }, 1000);
 });
 
-function addLeadingZero(value) {
+function addStartingZero(value) {
   return String(value).padStart(2, '0');
 }
 
@@ -98,8 +97,8 @@ function convertMiliseconds(ms) {
 
 function updateTimer(ms) {
   const { days, hours, minutes, seconds } = convertMiliseconds(ms);
-  daysEl.textContent = addLeadingZero(days);
-  hoursEl.textContent = addLeadingZero(hours);
-  minutesEl.textContent = addLeadingZero(minutes);
-  secondsEl.textContent = addLeadingZero(seconds);
+  daysEl.textContent = addStartingZero(days);
+  hoursEl.textContent = addStartingZero(hours);
+  minutesEl.textContent = addStartingZero(minutes);
+  secondsEl.textContent = addStartingZero(seconds);
 }
