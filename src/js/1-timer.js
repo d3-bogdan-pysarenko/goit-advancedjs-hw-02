@@ -81,7 +81,7 @@ function addStartingZero(value) {
   return String(value).padStart(2, '0');
 }
 
-function convertMiliseconds(ms) {
+function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -96,7 +96,7 @@ function convertMiliseconds(ms) {
 }
 
 function updateTimer(ms) {
-  const { days, hours, minutes, seconds } = convertMiliseconds(ms);
+  const { days, hours, minutes, seconds } = convertMs(ms);
   daysEl.textContent = addStartingZero(days);
   hoursEl.textContent = addStartingZero(hours);
   minutesEl.textContent = addStartingZero(minutes);
